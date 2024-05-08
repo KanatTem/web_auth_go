@@ -1,0 +1,66 @@
+{{ define "dashboard" }}
+
+  <h1 class="text-2xl font-bold mb-6">Global Admin Dashboard</h1>
+
+  <!-- Stats -->
+  <section class="grid grid-cols-2 gap-6 mb-8">
+    <div class="bg-white p-6 rounded-lg shadow text-center">
+      <p class="text-sm font-medium text-gray-500">Total Apps</p>
+      <p class="text-3xl font-extrabold">{{ len .Apps }}</p>
+    </div>
+    <div class="bg-white p-6 rounded-lg shadow text-center">
+      <p class="text-sm font-medium text-gray-500">Total Users</p>
+      <p class="text-3xl font-extrabold">{{ .TotalUsers }}</p>
+    </div>
+  </section>
+
+  <!-- Apps Table -->
+  <section class="bg-white rounded-lg shadow overflow-hidden">
+    <div class="flex items-center justify-between p-6 border-b">
+      <h2 class="text-xl font-semibold">Registered Apps</h2>
+      <button onclick="location.href='/apps/new'"
+              class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        + Add App
+      </button>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="min-w-full text-left">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-gray-600 font-medium uppercase">Name</th>
+            <th class="px-6 py-3 text-gray-600 font-medium uppercase">Description</th>
+            <th class="px-6 py-3 text-gray-600 font-medium uppercase">Roles</th>
+            <th class="px-6 py-3 text-gray-600 font-medium uppercase">Users</th>
+            <th class="px-6 py-3 text-gray-600 font-medium uppercase">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y">
+          {{ range .Apps }}
+          <tr class="hover:bg-gray-100">
+            <td class="px-6 py-4">{{ .Name }}</td>
+            <td class="px-6 py-4">{{ .Description }}</td>
+            <td class="px-6 py-4">{{ len .Roles }}</td>
+            <td class="px-6 py-4">{{ .UserCount }}</td>
+            <td class="px-6 py-4 space-x-2">
+              <a href="/apps/{{ .ID }}/edit"
+                 class="text-blue-600 hover:underline">Edit</a>
+              <a href="/apps/{{ .ID }}/delete"
+                 class="text-red-600 hover:underline"
+                 onclick="return confirm('Delete this app?')">Delete</a>
+            </td>
+          </tr>
+          {{ else }}
+          <tr>
+            <td colspan="5" class="px-6 py-4 text-center text-gray-500">
+              No apps yet.
+            </td>
+          </tr>
+          {{ end }}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+{{ end }}
+
+{{ template "base" . }}
